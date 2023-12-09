@@ -20,7 +20,6 @@ cur.execute("CREATE TABLE IF NOT EXISTS game(username, wvg, score, datum, nummer
 cur.execute("CREATE TABLE IF NOT EXISTS opties(naam, value, id)")
 
 
-
 def kiesZetComputer():
   num = random.randint(1, 3)
   
@@ -34,10 +33,23 @@ def kiesZetComputer():
       return computerzet[i]
 
 
-def afrondWinCheck():
-  pass
+def optieCheck():
+  #dictionary met opties true of false maken bij opstart en na optie update
+  #dus optieCheck() in bijopstart
+  a = "werkt niet"
+  for row in cur.execute("SELECT value FROM opties WHERE id = 0"):
+    for i in row:
+      if i == 1: 
+        # afronden true
+        pass
+      elif i == 0:
+        #afronden false
+        pass
+  return a
+        
 
 def opties():
+  # deze check bij opstart functie doen en die functie maken
   for row in cur.execute("SELECT count(*) FROM opties"):
     for i in row:
         if i == 0:
@@ -53,9 +65,9 @@ def opties():
   for row in cur.execute("SELECT * FROM opties"):
     print(row)
   optiesInvoer = input("optie: ").lower()
-  if optiesInvoer == "afrondWin_aan":
+  if optiesInvoer == "afrondwin_aan":
     afrondKeuze = True
-  elif optiesInvoer == "afrondWin_uit":
+  elif optiesInvoer == "afrondwin_uit":
     afrondKeuze = False
   cur.execute('''UPDATE opties SET value = ? WHERE id = ?''', (afrondKeuze, id)) #hier de id values updaten
   con.commit()
@@ -127,6 +139,7 @@ def delID():
   else:
     pass
 
+
 def printID():
   try:
     welkeRow = int(input("welke game? :"))
@@ -169,6 +182,8 @@ def startGame(rondesCheck):
   
 
 def spel(username, rondes, score):
+  afrond = optieCheck()
+  print(afrond) #dit test ^ook
   rondesTot = 0
   w=v=g= 0
   nummer = 0
